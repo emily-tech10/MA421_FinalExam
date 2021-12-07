@@ -217,21 +217,42 @@ pre code {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkYXRhcml1bSlcbmBgYCJ9 -->
-<pre class="r"><code>library(datarium)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBJbXBvcnRpbmcgTGlicmFyaWVzIFxubGlicmFyeShkYXRhcml1bSlcbmBgYCJ9 -->
+<pre class="r"><code># Importing Libraries 
+library(datarium)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YShcImRlcHJlc3Npb25cIilcbmBgYCJ9 -->
-<pre class="r"><code>data(&quot;depression&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0ltcG9ydGluZyBEYXRhc2V0IFxuZGF0YShcImhlYWRhY2hlXCIpXG5gYGAifQ== -->
+<pre class="r"><code>#Importing Dataset 
+data(&quot;headache&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<div id="descriptive-statistics" class="section level1">
+<h1>Descriptive Statistics</h1>
+<div id="for-quantitative-variables" class="section level2">
+<h2>For quantitative variables:</h2>
+<p>Numerical Measures Mean Std Dev Skew Kurtosis Boxplots &amp; Outliers Equal Variance tests (&amp; their limitations) Normality Tests: qq plots</p>
+</div>
+<div id="for-categorical-variables" class="section level2">
+<h2>For Categorical variables:</h2>
+<p>Frequency charts or tally charts Means plots &amp; Interaction plots Discussion of what all of this means</p>
+</div>
+</div>
+<div id="overview-of-statistical-analyses-performed" class="section level1">
+<h1>Overview of statistical analyses performed</h1>
+<p>What tests: Overall, post hocs, contrasts Null for each in terms of the question under study and variables Assumptions needed for each test (e.g., normality, equal variances, sphericity, non-interaction of any blocks (or subjects) with other factors, etc.</p>
+</div>
+<div id="empirical-power-of-your-tests." class="section level1">
+<h1>Empirical power of your tests.</h1>
+<p>What assumptions did you make in calculating this power? If power is less than 90%, what sample size is needed?</p>
 <!-- rnb-text-end -->
+</div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiRmluYWwgUHJvaiBDb2RlIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgpgYGB7cn0KbGlicmFyeShkYXRhcml1bSkKYGBgCgpgYGB7cn0KZGF0YSgiZGVwcmVzc2lvbiIpCmRhdGEoImhlYWRhY2hlIikKZGF0YSgicGVyZm9ybWFuY2UiKQpgYGAKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiRmluYWwgUHJvaiBDb2RlIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgpgYGB7cn0KIyBJbXBvcnRpbmcgTGlicmFyaWVzIApsaWJyYXJ5KGRhdGFyaXVtKQpgYGAKCmBgYHtyfQojSW1wb3J0aW5nIERhdGFzZXQgCmRhdGEoImhlYWRhY2hlIikKYGBgCgojIERlc2NyaXB0aXZlIFN0YXRpc3RpY3MgCgojIyBGb3IgcXVhbnRpdGF0aXZlIHZhcmlhYmxlczoKICBOdW1lcmljYWwgTWVhc3VyZXMKICBNZWFuCiAgU3RkIERldgogIFNrZXcKICBLdXJ0b3NpcwogIEJveHBsb3RzICYgT3V0bGllcnMKICBFcXVhbCBWYXJpYW5jZSB0ZXN0cyAoJiB0aGVpciBsaW1pdGF0aW9ucykKICBOb3JtYWxpdHkgVGVzdHM6IHFxIHBsb3RzCgojIyBGb3IgQ2F0ZWdvcmljYWwgdmFyaWFibGVzOgogIEZyZXF1ZW5jeSBjaGFydHMgb3IgdGFsbHkgY2hhcnRzCiAgTWVhbnMgcGxvdHMgJiBJbnRlcmFjdGlvbiBwbG90cwogIERpc2N1c3Npb24gb2Ygd2hhdCBhbGwgb2YgdGhpcyBtZWFucwoKIyBPdmVydmlldyBvZiBzdGF0aXN0aWNhbCBhbmFseXNlcyBwZXJmb3JtZWQKICBXaGF0IHRlc3RzOiBPdmVyYWxsLCBwb3N0IGhvY3MsIGNvbnRyYXN0cwogIE51bGwgZm9yIGVhY2ggaW4gdGVybXMgb2YgdGhlIHF1ZXN0aW9uIHVuZGVyIHN0dWR5IGFuZCB2YXJpYWJsZXMKICBBc3N1bXB0aW9ucyBuZWVkZWQgZm9yIGVhY2ggdGVzdCAoZS5nLiwgbm9ybWFsaXR5LCBlcXVhbCB2YXJpYW5jZXMsIHNwaGVyaWNpdHksIG5vbi1pbnRlcmFjdGlvbiBvZiAgICAgYW55IGJsb2NrcyAob3Igc3ViamVjdHMpIHdpdGggb3RoZXIgZmFjdG9ycywgZXRjLgogIAojIEVtcGlyaWNhbCBwb3dlciBvZiB5b3VyIHRlc3RzLiAKICBXaGF0IGFzc3VtcHRpb25zIGRpZCB5b3UgbWFrZSBpbiBjYWxjdWxhdGluZyB0aGlzIHBvd2VyPwogIElmIHBvd2VyIGlzIGxlc3MgdGhhbiA5MCUsIHdoYXQgc2FtcGxlIHNpemUgaXMgbmVlZGVkPwoK</div>
 
 
 

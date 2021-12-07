@@ -4,12 +4,38 @@ output: html_notebook
 ---
 
 ```{r}
+# Importing Libraries 
 library(datarium)
 ```
 
 ```{r}
-data("depression")
+#Importing Dataset 
 data("headache")
-data("performance")
 ```
+
+# Descriptive Statistics 
+
+## For quantitative variables:
+  Numerical Measures
+  Mean
+  Std Dev
+  Skew
+  Kurtosis
+  Boxplots & Outliers
+  Equal Variance tests (& their limitations)
+  Normality Tests: qq plots
+
+## For Categorical variables:
+  Frequency charts or tally charts
+  Means plots & Interaction plots
+  Discussion of what all of this means
+
+# Overview of statistical analyses performed
+  What tests: Overall, post hocs, contrasts
+  Null for each in terms of the question under study and variables
+  Assumptions needed for each test (e.g., normality, equal variances, sphericity, non-interaction of     any blocks (or subjects) with other factors, etc.
+  
+# Empirical power of your tests. 
+  What assumptions did you make in calculating this power?
+  If power is less than 90%, what sample size is needed?
 
