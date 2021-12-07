@@ -1,0 +1,15 @@
+---
+title: "Final Proj Code"
+output: html_notebook
+---
+
+```{r}
+library(datarium)
+```
+
+```{r}
+data("depression")
+data("headache")
+data("performance")
+```
+
