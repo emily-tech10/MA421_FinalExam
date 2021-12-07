@@ -11,9 +11,15 @@ library(datarium)
 ```{r}
 #Importing Dataset 
 data("headache")
+library(readxl)
+headachelong <- read_excel("~/Desktop/ANOVA/headachelong.xlsx")
+View(headachelong)
 ```
 
 # Descriptive Statistics 
+```{r}
+
+```
 
 ## For quantitative variables:
   Numerical Measures
@@ -28,6 +34,10 @@ data("headache")
 ## For Categorical variables:
   Frequency charts or tally charts
   Means plots & Interaction plots
+```{r}
+ggline(headache, x = "id", y = "pain_score", col="risk", add=c("mean_se"))
+```
+  
   Discussion of what all of this means
 
 # Overview of statistical analyses performed
