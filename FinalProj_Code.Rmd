@@ -5,20 +5,26 @@ output: html_notebook
 
 ```{r}
 # Importing Libraries 
-library(datarium)
+library(readxl)
+library(ez)
+library(ggplot2)
+library(multcomp)
+library(nlme)
+library(pastecs)
+library(reshape2)
+library(haven)
+library(dplyr)
+library(ggpubr)
+library(rstatix)
+library(mosaic)
+library(car)
+library(moments)
+
 ```
 
 ```{r}
 #Importing Dataset 
-data("headache")
-library(readxl)
-headachelong <- read_excel("~/Desktop/ANOVA/headachelong.xlsx")
-View(headachelong)
-```
-
-# Descriptive Statistics 
-```{r}
-
+headachelong<-read_excel("headachelong.xlsx")
 ```
 
 ## For quantitative variables:
@@ -30,21 +36,102 @@ View(headachelong)
   Boxplots & Outliers
   Equal Variance tests (& their limitations)
   Normality Tests: qq plots
+  
+# Descriptive Statistics 
+```{r}
+# Quantitative Variable - Pain Score Descriptives 
+painscore<-headachelong$painscore #saving painscore to a variable 
+descriptives<-favstats(painscore)
+descriptives$mean # shows mean 
+descriptives$sd # shows sd
+```
+
+```{r}
+# Quantitative Variable -  Pain Score Descriptives 
+skewness(painscore)
+kurtosis(painscore)
+ks.test(painscore,"pnorm")
+hist(painscore)
+jarque.test(painscore)
+```
+Skewness = 0.58 > 0, deviates from normality - right skewed, skew is not that bad because it is less than 1 
+Kurtosis = 3.52 > 3 , thinner tailed than normal, leptokurtic, not too bad. 
+Ks.test = pval < 0.05, reject null of normality 
+Jarque Test = pval > 0.05 fail to reject that data has same skew and kurtosis that a normal with the same mean and sd has. 
+
+```{r}
+#Quantitative Variable - Pain Score Descriptives 
+
+#Boxplots 
+gf_boxplot(painscore~gender,data = headachelong) 
+gf_boxplot(painscore~trmt,data=headachelong)
+gf_boxplot(painscore~risk,data=headachelong)
+
+#Equal Variance Test 
+leveneTest(painscore~gender,data=headachelong)
+leveneTest(painscore~trmt,data=headachelong)
+leveneTest(painscore~risk,data=headachelong)
+
+#Normality Test: qqplot 
+gf_qq(~painscore,data=headachelong) %>% gf_qqline()
+```
+In the boxplots for each, there seems to be outliers. 
+
 
 ## For Categorical variables:
   Frequency charts or tally charts
   Means plots & Interaction plots
 ```{r}
-ggline(headache, x = "id", y = "pain_score", col="risk", add=c("mean_se"))
+#Tally 
+tally(~gender,data = headachelong) #gender
+tally(~trmt,data = headachelong) #treatment
+tally(~risk,data = headachelong) #risk 
+
+#Interaction plots 
+ggline(data = headachelong, x = "gender", y = "painscore", col = "risk", add = c("mean_se"))
+ggline(data = headachelong, x = "trmt", y = "painscore", col = "risk", add = c("mean_se"))
+ggline(data = headachelong, x = "trmt", y = "painscore", col = "gender", add = c("mean_se"))
+
+#Creating subset for threeway interaction
+painscore.m<-subset(headachelong,gender == "male")
+ggline(data = painscore.m, x = "trmt", y = "painscore", col = "risk", add = c("mean_se"),main = "Male")
+painscore.f<-subset(headachelong,gender == "female")
+ggline(data = painscore.f, x = "trmt", y = "painscore", col = "risk", add = c("mean_se"),main = "Female")
+painscore.x<-subset(headachelong,trmt == "X")
+ggline(data = painscore.x, x = "gender", y = "painscore", col = "risk", add = c("mean_se"), main = "Treatment X")
+painscore.y<-subset(headachelong,trmt == "Y")
+ggline(data = painscore.y, x = "gender", y = "painscore", col = "risk", add = c("mean_se"), main = "Treatment Y")
+painscore.z<-subset(headachelong,trmt == "Z")
+ggline(data = painscore.z, x = "gender", y = "painscore", col = "risk", add = c("mean_se"), main = "Treatment Z")
+painscore.low<-subset(headachelong,risk  == "low")
+ggline(data = painscore.low, x = "gender", y = "painscore", col = "trmt", add = c("mean_se"), main = "Low Risk")
+painscore.high<-subset(headachelong,risk  == "high")
+ggline(data = painscore.high, x = "gender", y = "painscore", col = "trmt", add = c("mean_se"), main = "High Risk")
 ```
   
-  Discussion of what all of this means
-
 # Overview of statistical analyses performed
   What tests: Overall, post hocs, contrasts
   Null for each in terms of the question under study and variables
   Assumptions needed for each test (e.g., normality, equal variances, sphericity, non-interaction of     any blocks (or subjects) with other factors, etc.
   
+```{r}
+# Creating Contrasts - Gender 
+```
+
+```{r}
+# ANOVA Model 
+```
+
+```{r}
+# Post Hocs 
+```
+
+# Analysis of residuals
+What assumptions about your data are you looking to verify?
+Which plots to use for which assumption. Why?
+Your results.
+How valid is your analysis?
+
 # Empirical power of your tests. 
   What assumptions did you make in calculating this power?
   If power is less than 90%, what sample size is needed?
