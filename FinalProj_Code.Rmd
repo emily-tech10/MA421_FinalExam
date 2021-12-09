@@ -21,7 +21,6 @@ library(car)
 library(moments)
 
 ```
-
 ```{r}
 #Importing Dataset 
 headachelong<-read_excel("headachelong.xlsx")
