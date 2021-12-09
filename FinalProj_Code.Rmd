@@ -19,8 +19,8 @@ library(rstatix)
 library(mosaic)
 library(car)
 library(moments)
-
 ```
+
 ```{r}
 #Importing Dataset 
 headachelong<-read_excel("headachelong.xlsx")
@@ -112,17 +112,29 @@ ggline(data = painscore.high, x = "gender", y = "painscore", col = "trmt", add =
   What tests: Overall, post hocs, contrasts
   Null for each in terms of the question under study and variables
   Assumptions needed for each test (e.g., normality, equal variances, sphericity, non-interaction of     any blocks (or subjects) with other factors, etc.
-  
+
+Testing a null of no difference in mean painscores
+Hypothesis 1: Treatment Y is better than X. 
+Hypothesis 2: Treatment Z is better than X and Y 
 ```{r}
-# Creating Contrasts - Gender 
+# Creating Contrasts - Treatments 
+headachelong$trmt<-as.factor(headachelong$trmt)
+YvsX<-c(0,-1,1)
+ZvsOthers<-c(-2,1,1)
+
+contrasts(headachelong$trmt)<-cbind(YvsX,ZvsOthers)
+headachelong$trmt
 ```
 
 ```{r}
-# ANOVA Model 
+# ANOVA Model
+headache.mod<-lme(painscore~trmt+gender+risk+trmt:gender+trmt:risk+gender:risk+trmt:gender:risk,random= ~1|id/gender/risk,data=headachelong,method="ML")
+summary(headache.mod)
 ```
 
 ```{r}
-# Post Hocs 
+# Post Hocs
+pairwise.t.test(headachelong$painscore,headachelong$trmt,paired = TRUE, p.adjust.method = "bonferroni")
 ```
 
 # Analysis of residuals
@@ -131,7 +143,19 @@ Which plots to use for which assumption. Why?
 Your results.
 How valid is your analysis?
 
+```{r}
+#Analysis of Residuals 
+plot(headache.mod,which = "X")
+```
+
+
 # Empirical power of your tests. 
   What assumptions did you make in calculating this power?
   If power is less than 90%, what sample size is needed?
+  
+```{r}
+#Empirical Power of Tests 
+
+```
+
 
