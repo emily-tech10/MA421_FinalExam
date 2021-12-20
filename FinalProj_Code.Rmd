@@ -113,22 +113,60 @@ ggline(data = painscore.high, x = "gender", y = "painscore", col = "trmt", add =
   Null for each in terms of the question under study and variables
   Assumptions needed for each test (e.g., normality, equal variances, sphericity, non-interaction of     any blocks (or subjects) with other factors, etc.
 
+
 Testing a null of no difference in mean painscores
+**ORTHOGONAL**
 Hypothesis 1: Treatment Y is better than X. 
 Hypothesis 2: Treatment Z is better than X and Y 
 ```{r}
-# Creating Contrasts - Treatments 
+# Creating Contrasts - Treatments *ORTHOGONAL*
 headachelong$trmt<-as.factor(headachelong$trmt)
 YvsX<-c(0,-1,1)
 ZvsOthers<-c(-2,1,1)
 
+#headachelong$risk<-as.factor(headachelong$risk)
+#lowXvshighX<-c()
+#lowYvshighY<-c()
+#lowZvshighZ<-c()
+
 contrasts(headachelong$trmt)<-cbind(YvsX,ZvsOthers)
 headachelong$trmt
+
+#contrasts(headachelong$risk)<-cbind(lowXvshighX,lowYvshighY,lowZvshighZ)
+#headachelong$risk
 ```
 
 ```{r}
 # ANOVA Model
 headache.mod<-lme(painscore~trmt+gender+risk+trmt:gender+trmt:risk+gender:risk+trmt:gender:risk,random= ~1|id/gender/risk,data=headachelong,method="ML")
+
+#headache.mod<-ezANOVA(headachelong,dv = .(painscore),wid=.(id),within=.(risk,trmt),type = 3, detailed=TRUE)
+#headache.mod
+
+```
+
+```{r}
+# Post Hocs
+pairwise.t.test(headachelong$painscore,headachelong$trmt,paired = TRUE, p.adjust.method = "bonferroni")
+```
+
+Testing a null of no difference in mean painscores
+**NON-ORTHOGONAL**
+Hypothesis 1: 
+Hypothesis 2: 
+```{r}
+# Creating Contrasts - Treatments *NON-ORTHOGONAL*
+headachelong$trmt<-as.factor(headachelong$trmt)
+XvsY<-c(1,0,0)
+YvsZ<-c(0,0,1)
+
+contrasts(headachelong$trmt)<-cbind(XvsY,YvsZ)
+headachelong$trmt
+```
+
+```{r}
+# ANOVA Model
+headache.mod.nonorthogonal<-lme(painscore~trmt+gender+risk+trmt:gender+trmt:risk+gender:risk+trmt:gender:risk,random= ~1|id/gender/risk,data=headachelong,method="ML")
 summary(headache.mod)
 ```
 
@@ -142,20 +180,51 @@ What assumptions about your data are you looking to verify?
 Which plots to use for which assumption. Why?
 Your results.
 How valid is your analysis?
-
 ```{r}
-#Analysis of Residuals 
-plot(headache.mod,which = "X")
+#Analysis of Residuals - Orthogonal 
+par(mfrow = c(2,2))
+plot(headache.mod.nonorthogonal,which=5)
+plot(headache.mod.nonorthogonal,which = 1)
+plot(headache.mod.nonorthogonal,which = 2)
+headachelong$id<-c(1:72)
+plot(residuals(headache.mod.nonorthogonal)~id, main = "Residuals vs Exp.Unit",font.main = 1, data = headachelong)
 ```
 
 
 # Empirical power of your tests. 
   What assumptions did you make in calculating this power?
   If power is less than 90%, what sample size is needed?
-  
 ```{r}
 #Empirical Power of Tests 
 
+set.seed(100)
+
+nreps=1000
+
+pval<-numeric(nreps)
+
+result<-numeric(nreps)
+
+donotreject=0
+
+for (i in 1:nreps){
+y1<-rnorm(10,60,2)
+y2<-rnorm(10,65,15) #means are NOT same, so NULL is false
+t<-t.test(y1,y2,var.equal=TRUE)
+pval[i]<-t$p.value
+if (pval[i]>=0.05){
+  
+ ##result[i]= pval[i]
+ donotreject=donotreject+1
+} else donotreject=donotreject # result[i]=1
+
+
+}
+donotreject
+type2=donotreject/nreps
+type2
+power=1-type2
+power
 ```
 
 
