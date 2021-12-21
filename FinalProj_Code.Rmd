@@ -140,6 +140,8 @@ headachelong$trmt
 # ANOVA Model
 headache.mod<-lme(painscore~trmt+gender+risk+trmt:gender+trmt:risk+gender:risk+trmt:gender:risk,random= ~1|id/gender/risk,data=headachelong,method="ML")
 
+anova(headache.mod)
+
 #headache.mod<-ezANOVA(headachelong,dv = .(painscore),wid=.(id),within=.(risk,trmt),type = 3, detailed=TRUE)
 #headache.mod
 
@@ -182,12 +184,15 @@ Your results.
 How valid is your analysis?
 ```{r}
 #Analysis of Residuals - Orthogonal 
-par(mfrow = c(2,2))
-plot(headache.mod.nonorthogonal,which=5)
-plot(headache.mod.nonorthogonal,which = 1)
-plot(headache.mod.nonorthogonal,which = 2)
-headachelong$id<-c(1:72)
-plot(residuals(headache.mod.nonorthogonal)~id, main = "Residuals vs Exp.Unit",font.main = 1, data = headachelong)
+plot(headache.mod)
+
+#par(mfrow = c(2,2))
+#plot(headache.mod.nonorthogonal,which=5)
+#plot(headache.mod.nonorthogonal,which = 1)
+#plot(headache.mod.nonorthogonal,which = 2)
+#headachelong$id<-c(1:72)
+#plot(residuals(headache.mod.nonorthogonal)~id, main = "Residuals vs Exp.Unit",font.main = 1, data = headachelong)
+
 ```
 
 
@@ -196,29 +201,27 @@ plot(residuals(headache.mod.nonorthogonal)~id, main = "Residuals vs Exp.Unit",fo
   If power is less than 90%, what sample size is needed?
 ```{r}
 #Empirical Power of Tests 
+n = 24
+r = 3 
+nT = n*r 
 
-set.seed(100)
-
+set.seed(20)
 nreps=1000
-
 pval<-numeric(nreps)
-
-result<-numeric(nreps)
-
+#result<-numeric(nreps)
 donotreject=0
 
 for (i in 1:nreps){
-y1<-rnorm(10,60,2)
-y2<-rnorm(10,65,15) #means are NOT same, so NULL is false
-t<-t.test(y1,y2,var.equal=TRUE)
-pval[i]<-t$p.value
-if (pval[i]>=0.05){
-  
+resp1<-sample(headachelong$painscore[c(1:24)],replace = TRUE, size = n)
+resp2<-sample(headachelong$painscore[c(25:48)],replace = TRUE, size = n)
+resp3<-sample(headachelong$painscore[c(49:72)],replace = TRUE, size = n)
+head.aov<-aov(painscore~gender+risk+trmt,data=headachelong)
+sum<-summary(head.aov)
+pval[i]<-sum[[1]]$`Pr(>F)`[1]
+if (pval[i]/2>=0.05){
  ##result[i]= pval[i]
  donotreject=donotreject+1
-} else donotreject=donotreject # result[i]=1
-
-
+} else donotreject=donotreject 
 }
 donotreject
 type2=donotreject/nreps
